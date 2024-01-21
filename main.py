@@ -58,7 +58,6 @@ class CoffeMachine(pygame.sprite.Sprite):
 
 class Cream(pygame.sprite.Sprite):
     image = load_image("cream_pitcher.png")
-    rotate_image = load_image('cream_pitcher_rotate.png')
 
     def __init__(self):
         super().__init__(all_sprites, things_group)
