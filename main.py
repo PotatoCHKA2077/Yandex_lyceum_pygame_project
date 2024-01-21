@@ -81,7 +81,7 @@ class Cream(pygame.sprite.Sprite):
                     self.is_moving = True
                     pygame.mouse.set_visible(False)
                 else:
-                    if not self.is_adding and zone.rect.collidepoint(args[0].pos):
+                    if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
                         self.image = pygame.transform.rotate(self.image, 30)
                         self.rect = self.image.get_rect()
@@ -108,7 +108,7 @@ class Cream(pygame.sprite.Sprite):
             else:
                 self.rect.x = args[0].pos[0] - 40
                 self.rect.y = args[0].pos[1] - self.rect.height // 2
-                if not zone.rect.collidepoint(args[0].pos):
+                if not add_zone.rect.collidepoint(args[0].pos):
                     self.is_adding = False
                     self.image = Cream.image
             if pygame.mouse.get_focused():
@@ -140,7 +140,7 @@ class Milk(pygame.sprite.Sprite):
                     self.is_moving = True
                     pygame.mouse.set_visible(False)
                 else:
-                    if not self.is_adding and zone.rect.collidepoint(args[0].pos):
+                    if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
                         self.image = pygame.transform.rotate(self.image, 30)
                         self.rect = self.image.get_rect()
@@ -167,7 +167,7 @@ class Milk(pygame.sprite.Sprite):
             else:
                 self.rect.x = args[0].pos[0] - 10
                 self.rect.y = args[0].pos[1] - 75
-                if not zone.rect.collidepoint(args[0].pos):
+                if not add_zone.rect.collidepoint(args[0].pos):
                     self.is_adding = False
                     self.image = Milk.image
             if pygame.mouse.get_focused():
@@ -200,7 +200,7 @@ class CherrySyrup(pygame.sprite.Sprite):
                     self.is_moving = True
                     pygame.mouse.set_visible(False)
                 else:
-                    if not self.is_adding and zone.rect.collidepoint(args[0].pos):
+                    if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
                         self.image = pygame.transform.rotate(self.image, 40)
                         self.rect = self.image.get_rect()
@@ -227,7 +227,7 @@ class CherrySyrup(pygame.sprite.Sprite):
             else:
                 self.rect.x = args[0].pos[0] - 30
                 self.rect.y = args[0].pos[1] - 20
-                if not zone.rect.collidepoint(args[0].pos):
+                if not add_zone.rect.collidepoint(args[0].pos):
                     self.is_adding = False
                     self.image = CherrySyrup.image
             if pygame.mouse.get_focused():
@@ -260,7 +260,7 @@ class MangoSyrup(pygame.sprite.Sprite):
                     self.is_moving = True
                     pygame.mouse.set_visible(False)
                 else:
-                    if not self.is_adding and zone.rect.collidepoint(args[0].pos):
+                    if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
                         self.image = pygame.transform.rotate(self.image, 40)
                         self.rect = self.image.get_rect()
@@ -287,7 +287,7 @@ class MangoSyrup(pygame.sprite.Sprite):
             else:
                 self.rect.x = args[0].pos[0] - 30
                 self.rect.y = args[0].pos[1] - 20
-                if not zone.rect.collidepoint(args[0].pos):
+                if not add_zone.rect.collidepoint(args[0].pos):
                     self.is_adding = False
                     self.image = MangoSyrup.image
             if pygame.mouse.get_focused():
@@ -404,7 +404,6 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(size)
     clock = Clock()
     all_sprites = pygame.sprite.Group()
-    buttons_group = pygame.sprite.Group()
     things_group = pygame.sprite.Group()
     liquid_group = pygame.sprite.Group()
     cur_group = pygame.sprite.Group()
@@ -417,7 +416,7 @@ if __name__ == '__main__':
     mango_syrup = MangoSyrup()
     cherry_syrup = CherrySyrup()
     cup = Cup()
-    zone = AddZone()
+    add_zone = AddZone()
     while running:
         screen.blit(fon, (0, 0))
         for event in pygame.event.get():
