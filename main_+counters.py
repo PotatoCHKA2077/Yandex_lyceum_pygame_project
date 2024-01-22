@@ -3,6 +3,7 @@ import sys
 from random import *
 import pygame
 from pygame.time import Clock
+from recipes import *
 mango_counter = 0
 chery_counter = 0
 milk_counter = 0
@@ -431,6 +432,142 @@ def count_viz(s):
     pygame.draw.rect(s, (255, 255, 255), (40, 10, 10, 102), 2)
     pygame.draw.rect(s, (255, 255, 255), (55, 10, 10, 102), 2)
     pygame.draw.rect(s, (255, 255, 255), (70, 10, 10, 102), 2)
+    pygame.draw.rect(s, (255, 255, 255), (626, 10, 70, 70), 0)
+
+
+def draw_book(s):
+    n = 80
+    k = 240
+    m = 400
+    c = 25
+    v = 155
+    b = 280
+    if is_open:
+        pygame.draw.rect(screen, (160, 120, 90), (10, 0, 560, 405))
+        # ---------------------------------------------------------------------------------------------------
+        pygame.draw.rect(screen, (255, 180, 0), (10 + n, c, 10, recipes_lvl1['cappuccino'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + n, c, 10, recipes_lvl1['cappuccino'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + n, c, 10, recipes_lvl1['cappuccino'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + n, c, 10, recipes_lvl1['cappuccino'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + n, c, 10, recipes_lvl1['cappuccino'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + n, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + n, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + n, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + n, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + n, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 180, 0), (10 + k, c, 10, recipes_lvl1['latte'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + k, c, 10, recipes_lvl1['latte'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + k, c, 10, recipes_lvl1['latte'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + k, c, 10, recipes_lvl1['latte'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + k, c, 10, recipes_lvl1['latte'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + k, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + k, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + k, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + k, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + k, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 180, 0), (10 + m, c, 10, recipes_lvl1['espresso'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + m, c, 10, recipes_lvl1['espresso'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + m, c, 10, recipes_lvl1['espresso'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + m, c, 10, recipes_lvl1['espresso'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + m, c, 10, recipes_lvl1['espresso'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + m, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + m, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + m, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + m, c, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + m, c, 10, 102), 2)
+        # -------------------------------------------------------------------------------------
+        pygame.draw.rect(screen, (255, 180, 0), (10 + n, v, 10, recipes_lvl2['cherry_cappuccino'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + n, v, 10, recipes_lvl2['cherry_cappuccino'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + n, v, 10, recipes_lvl2['cherry_cappuccino'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + n, v, 10, recipes_lvl2['cherry_cappuccino'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + n, v, 10, recipes_lvl2['cherry_cappuccino'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + n, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + n, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + n, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + n, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + n, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 180, 0), (10 + k, v, 10, recipes_lvl2['cherry_latte'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + k, v, 10, recipes_lvl2['cherry_latte'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + k, v, 10, recipes_lvl2['cherry_latte'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + k, v, 10, recipes_lvl2['cherry_latte'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + k, v, 10, recipes_lvl2['cherry_latte'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + k, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + k, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + k, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + k, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + k, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 180, 0), (10 + m, v, 10, recipes_lvl2['raf'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + m, v, 10, recipes_lvl2['raf'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + m, v, 10, recipes_lvl2['raf'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + m, v, 10, recipes_lvl2['raf'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + m, v, 10, recipes_lvl2['raf'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + m, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + m, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + m, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + m, v, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + m, v, 10, 102), 2)
+        # -------------------------------------------------------------------------------------
+        pygame.draw.rect(screen, (255, 180, 0), (10 + n, b, 10, recipes_lvl3['cherry_raf'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + n, b, 10, recipes_lvl3['cherry_raf'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + n, b, 10, recipes_lvl3['cherry_raf'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + n, b, 10, recipes_lvl3['cherry_raf'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + n, b, 10, recipes_lvl3['cherry_raf'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + n, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + n, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + n, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + n, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + n, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 180, 0), (10 + k, b, 10, recipes_lvl3['mango_raf'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + k, b, 10, recipes_lvl3['mango_raf'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + k, b, 10, recipes_lvl3['mango_raf'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + k, b, 10, recipes_lvl3['mango_raf'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + k, b, 10, recipes_lvl3['mango_raf'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + k, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + k, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + k, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + k, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + k, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 180, 0), (10 + m, b, 10, recipes_lvl3['mango_cherry_raf'][0]))
+        pygame.draw.rect(screen, (150, 0, 0), (25 + m, b, 10, recipes_lvl3['mango_cherry_raf'][1]))
+        pygame.draw.rect(screen, (255, 255, 255), (40 + m, b, 10, recipes_lvl3['mango_cherry_raf'][2]))
+        pygame.draw.rect(screen, (200, 200, 200), (55 + m, b, 10, recipes_lvl3['mango_cherry_raf'][3]))
+        pygame.draw.rect(screen, (100, 60, 0), (70 + m, b, 10, recipes_lvl3['mango_cherry_raf'][4]))
+        pygame.draw.rect(screen, (255, 255, 255), (10 + m, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (25 + m, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (40 + m, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (55 + m, b, 10, 102), 2)
+        pygame.draw.rect(screen, (255, 255, 255), (70 + m, b, 10, 102), 2)
+        font = pygame.font.Font(None, 20)
+        lvl1 = font.render(" капучино                            латте                             эспрессо", True,
+                           (255, 255, 255))
+        lvl1_x = 90
+        lvl1_y = 10
+        screen.blit(lvl1, (lvl1_x, lvl1_y))
+
+        lvl2 = font.render(" капучино с вишней           латте с вишней                        раф ", True,
+                           (255, 255, 255))
+        lvl2_x = 60
+        lvl2_y = 140
+        screen.blit(lvl2, (lvl2_x, lvl2_y))
+
+        lvl3 = font.render("   раф с вишней                  раф с манго                раф манго/вишня", True,
+                           (255, 255, 255))
+        lvl3_x = 70
+        lvl3_y = 263
+        screen.blit(lvl3, (lvl3_x, lvl3_y))
+        pygame.display.flip()
+
+
+def recipes_book(*args):
+    global is_open
+    is_open = False
+    if args[0].type == pygame.MOUSEBUTTONDOWN and 627 < args[0].pos[0] < 692 and 11 < args[0].pos[1] < 76:
+        if not is_open:
+            is_open = True
+        else:
+            is_open = False
+
+
 
 
 if __name__ == '__main__':
@@ -438,6 +575,7 @@ if __name__ == '__main__':
     size = width, height = 720, 405
     fps = 50
     GRAVITY = 0.1
+    is_open = False
     screen = pygame.display.set_mode(size)
     clock = Clock()
     all_sprites = pygame.sprite.Group()
@@ -458,6 +596,7 @@ if __name__ == '__main__':
 
         screen.blit(fon, (0, 0))
         for event in pygame.event.get():
+            recipes_book(event)
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEMOTION:
@@ -476,5 +615,6 @@ if __name__ == '__main__':
             cherry_syrup_falling()
         all_sprites.draw(screen)
         count_viz(screen)
+        draw_book(screen)
         pygame.display.flip()
         clock.tick(fps)
