@@ -3,6 +3,11 @@ import sys
 from random import *
 import pygame
 from pygame.time import Clock
+mango_counter = 0
+chery_counter = 0
+milk_counter = 0
+cream_counter = 0
+coffee_counter = 0
 
 
 def load_image(name):
@@ -20,30 +25,45 @@ def terminate():
 
 
 def coffee_falling():
+    global coffee_counter
     for _ in range(4):
         Liquid((choice([randrange(coffe_machine.rect.x + 80, coffe_machine.rect.x + 84),
                         randrange(coffe_machine.rect.x+102, coffe_machine.rect.x+106)]),
                 coffe_machine.rect.y + 149), (99, 52, 1))
+    if coffee_counter < 100:
+        coffee_counter += 1
 
 
 def cream_falling():
+    global cream_counter
     for _ in range(3):
         Liquid((randrange(cream.rect.x + 37, cream.rect.x + 43), cream.rect.y+115), (255, 255, 255))
+    if cream_counter < 100:
+        cream_counter += 1
 
 
 def milk_falling():
+    global milk_counter
     for _ in range(3):
         Liquid((randrange(milk.rect.x + 7, milk.rect.x + 13), milk.rect.y+83), (255, 255, 255))
+    if milk_counter < 100:
+        milk_counter += 1
 
 
 def mango_syrup_falling():
+    global mango_counter
     for _ in range(3):
         Liquid((randrange(mango_syrup.rect.x + 22, mango_syrup.rect.x + 28), mango_syrup.rect.y+40), (255, 220, 28))
+    if mango_counter < 100:
+        mango_counter += 1
 
 
 def cherry_syrup_falling():
+    global chery_counter
     for _ in range(3):
         Liquid((randrange(cherry_syrup.rect.x + 22, cherry_syrup.rect.x + 28), cherry_syrup.rect.y+40), (125, 1, 1))
+    if chery_counter < 100:
+        chery_counter += 1
 
 
 class CoffeMachine(pygame.sprite.Sprite):
@@ -337,32 +357,6 @@ class Cup(pygame.sprite.Sprite):
             self.rect.y = args[0].pos[1] - self.rect.height // 2
             if pygame.mouse.get_focused():
                 all_sprites.draw(screen)
-        # if not self.is_moving and args[0].type == pygame.MOUSEBUTTONDOWN and args[0].button == 1 and \
-        #         self.rect.collidepoint(args[0].pos):
-        #     self.image = Cup.image
-        #     self.is_in_coffee_machine = False
-        #     self.rect = self.image.get_rect()
-        #     self.rect.x = args[0].pos[0] - self.rect.width // 2
-        #     self.rect.y = args[0].pos[1] - self.rect.height // 2
-        #     self.is_moving = True
-        #     pygame.mouse.set_visible(False)
-        # elif args and self.is_moving and args[0].type == pygame.MOUSEMOTION:
-        #     self.rect.x = args[0].pos[0] - self.rect.width // 2
-        #     self.rect.y = args[0].pos[1] - self.rect.height // 2
-        #     if pygame.mouse.get_focused():
-        #         all_sprites.draw(screen)
-        # elif args and self.is_moving and args[0].type == pygame.MOUSEBUTTONDOWN and args[0].button == 3:
-        #     if coffe_machine.rect.collidepoint(args[0].pos):
-        #         self.is_in_coffee_machine = True
-        #         self.image = Cup.little_image
-        #         self.rect = self.image.get_rect()
-        #         self.rect.x = coffe_machine.rect.x + coffe_machine.rect.width // 2 - self.rect.width // 2 + 2
-        #         self.rect.y = coffe_machine.rect.y + coffe_machine.rect.height - self.rect.height - 38
-        #     else:
-        #         self.rect.x = self.true_pos[0]
-        #         self.rect.y = self.true_pos[-1]
-        #     self.is_moving = False
-        #     pygame.mouse.set_visible(True)
         screen.blit(fon, (0, 0))
 
 
@@ -395,6 +389,24 @@ class AddZone(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 
+def count_viz(s):
+    global mango_counter
+    global chery_counter
+    global milk_counter
+    global cream_counter
+    global coffee_counter
+    pygame.draw.rect(s, (255, 180, 0), (10, 10, 10, mango_counter))
+    pygame.draw.rect(s, (150, 0, 0), (25, 10, 10, chery_counter))
+    pygame.draw.rect(s, (255, 255, 255), (40, 10, 10, milk_counter))
+    pygame.draw.rect(s, (200, 200, 200), (55, 10, 10, cream_counter))
+    pygame.draw.rect(s, (100, 60, 0), (70, 10, 10, coffee_counter))
+    pygame.draw.rect(s, (255, 255, 255), (10, 10, 10, 102), 2)
+    pygame.draw.rect(s, (255, 255, 255), (25, 10, 10, 102), 2)
+    pygame.draw.rect(s, (255, 255, 255), (40, 10, 10, 102), 2)
+    pygame.draw.rect(s, (255, 255, 255), (55, 10, 10, 102), 2)
+    pygame.draw.rect(s, (255, 255, 255), (70, 10, 10, 102), 2)
+
+
 if __name__ == '__main__':
     pygame.init()
     size = width, height = 720, 405
@@ -417,6 +429,7 @@ if __name__ == '__main__':
     cup = Cup()
     add_zone = AddZone()
     while running:
+
         screen.blit(fon, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -436,5 +449,6 @@ if __name__ == '__main__':
         if cherry_syrup.is_adding:
             cherry_syrup_falling()
         all_sprites.draw(screen)
+        count_viz(screen)
         pygame.display.flip()
         clock.tick(fps)
