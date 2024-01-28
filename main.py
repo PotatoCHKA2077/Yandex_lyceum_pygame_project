@@ -53,7 +53,7 @@ def order_screen():
 
 
 def cooking_screen():
-    global screen_is, fon, coffe_machine, cream, milk, mango_syrup, cherry_syrup, cup, add_zone
+    global screen_is, fon, coffe_machine, cream, milk, mango_syrup, cherry_syrup, cup, add_zone, coffee_order
     screen_is = 'cook'
     buttons_group.empty()
     fon = pygame.transform.scale(load_image('table_fon.png'), (width, height))
@@ -70,12 +70,18 @@ def cooking_screen():
     for text in buttons:
         Button(text, text_coord)
         text_coord[0] += 130
+    print(coffee_order)
+
+
+def result_screen():
+    global screen_is, fon, coffee_order
 
 
 def ordering():
     coffee_types = ['эспрессо', 'капучино', 'латте', 'раф']
     greetings = [' - Здравствуйте! Можно мне ', ' - Здравствуйте! Мне пожалуйста ', ' - Здравствуйте! Я бы хотел ',
                  ' - Добрый день! Мне пожалуйста ', ' - Добрый день! Можно мне ', ' - Добрый день! Я бы хотел ']
+    global coffee_order
     coffee_order = choice(coffee_types)
     order = [choice(greetings) + coffee_order]
     Dialog(order)
@@ -696,7 +702,7 @@ if __name__ == '__main__':
             if event.type == pygame.MOUSEMOTION:
                 things_group.update(event)
         if screen_is == 'cook':
-            global cup, cream, milk, mango_syrup, cherry_syrup
+            global cup, cream, milk, mango_syrup, cherry_syrup, coffee_order
             liquid_group.update()
             things_group.draw(screen)
             liquid_group.draw(screen)
@@ -712,10 +718,17 @@ if __name__ == '__main__':
                 mango_syrup_falling()
             if cherry_syrup.is_adding:
                 cherry_syrup_falling()
-        if screen_is == 'order':
+            if not is_open:
+                font = pygame.font.Font(None, 30)
+                order_text = font.render(f'Заказ: {coffee_order}', 1, (89, 58, 29))
+                screen.blit(order_text, (width // 2 - 100, 20))
+                buttons_group.draw(screen)
+        elif screen_is == 'order':
             guy = load_image('guy3.png')
             screen.blit(guy, (220, 68))
             dialog_group.draw(screen)
-        buttons_group.draw(screen)
+            buttons_group.draw(screen)
+        else:
+            buttons_group.draw(screen)
         pygame.display.flip()
         clock.tick(fps)
