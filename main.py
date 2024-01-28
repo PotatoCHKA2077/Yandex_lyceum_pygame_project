@@ -25,6 +25,26 @@ def terminate():
     sys.exit()
 
 
+def cooking_screen():
+    global fon
+    fon = pygame.transform.scale(load_image('table_fon.png'), (width, height))
+    screen.blit(fon, (0, 0))
+    global coffe_machine
+    coffe_machine = CoffeMachine()
+    global cream
+    cream = Cream()
+    global milk
+    milk = Milk()
+    global mango_syrup
+    mango_syrup = MangoSyrup()
+    global cherry_syrup
+    cherry_syrup = CherrySyrup()
+    global cup
+    cup = Cup()
+    global add_zone
+    add_zone = AddZone()
+
+
 def coffee_falling():
     global coffee_counter
     for _ in range(4):
@@ -32,7 +52,7 @@ def coffee_falling():
                         randrange(coffe_machine.rect.x+102, coffe_machine.rect.x+106)]),
                 coffe_machine.rect.y + 149), (99, 52, 1))
     if coffee_counter < 100:
-        coffee_counter += 1
+        coffee_counter += 0.5
 
 
 def cream_falling():
@@ -40,7 +60,7 @@ def cream_falling():
     for _ in range(3):
         Liquid((randrange(cream.rect.x + 37, cream.rect.x + 43), cream.rect.y+115), (255, 255, 255))
     if cream_counter < 100:
-        cream_counter += 1
+        cream_counter += 0.5
 
 
 def milk_falling():
@@ -48,7 +68,7 @@ def milk_falling():
     for _ in range(3):
         Liquid((randrange(milk.rect.x + 7, milk.rect.x + 13), milk.rect.y+83), (255, 255, 255))
     if milk_counter < 100:
-        milk_counter += 1
+        milk_counter += 0.5
 
 
 def mango_syrup_falling():
@@ -56,7 +76,7 @@ def mango_syrup_falling():
     for _ in range(3):
         Liquid((randrange(mango_syrup.rect.x + 22, mango_syrup.rect.x + 28), mango_syrup.rect.y+40), (255, 220, 28))
     if mango_counter < 100:
-        mango_counter += 1
+        mango_counter += 0.5
 
 
 def cherry_syrup_falling():
@@ -64,7 +84,7 @@ def cherry_syrup_falling():
     for _ in range(3):
         Liquid((randrange(cherry_syrup.rect.x + 22, cherry_syrup.rect.x + 28), cherry_syrup.rect.y+40), (125, 1, 1))
     if chery_counter < 100:
-        chery_counter += 1
+        chery_counter += 0.5
 
 
 class CoffeMachine(pygame.sprite.Sprite):
@@ -358,32 +378,6 @@ class Cup(pygame.sprite.Sprite):
             self.rect.y = args[0].pos[1] - self.rect.height // 2
             if pygame.mouse.get_focused():
                 all_sprites.draw(screen)
-        # if not self.is_moving and args[0].type == pygame.MOUSEBUTTONDOWN and args[0].button == 1 and \
-        #         self.rect.collidepoint(args[0].pos):
-        #     self.image = Cup.image
-        #     self.is_in_coffee_machine = False
-        #     self.rect = self.image.get_rect()
-        #     self.rect.x = args[0].pos[0] - self.rect.width // 2
-        #     self.rect.y = args[0].pos[1] - self.rect.height // 2
-        #     self.is_moving = True
-        #     pygame.mouse.set_visible(False)
-        # elif args and self.is_moving and args[0].type == pygame.MOUSEMOTION:
-        #     self.rect.x = args[0].pos[0] - self.rect.width // 2
-        #     self.rect.y = args[0].pos[1] - self.rect.height // 2
-        #     if pygame.mouse.get_focused():
-        #         all_sprites.draw(screen)
-        # elif args and self.is_moving and args[0].type == pygame.MOUSEBUTTONDOWN and args[0].button == 3:
-        #     if coffe_machine.rect.collidepoint(args[0].pos):
-        #         self.is_in_coffee_machine = True
-        #         self.image = Cup.little_image
-        #         self.rect = self.image.get_rect()
-        #         self.rect.x = coffe_machine.rect.x + coffe_machine.rect.width // 2 - self.rect.width // 2 + 2
-        #         self.rect.y = coffe_machine.rect.y + coffe_machine.rect.height - self.rect.height - 38
-        #     else:
-        #         self.rect.x = self.true_pos[0]
-        #         self.rect.y = self.true_pos[-1]
-        #     self.is_moving = False
-        #     pygame.mouse.set_visible(True)
         screen.blit(fon, (0, 0))
 
 
@@ -589,17 +583,8 @@ if __name__ == '__main__':
     liquid_group = pygame.sprite.Group()
     cur_group = pygame.sprite.Group()
     running = True
-    fon = pygame.transform.scale(load_image('table_fon.png'), (width, height))
-    screen.blit(fon, (0, 0))
-    coffe_machine = CoffeMachine()
-    cream = Cream()
-    milk = Milk()
-    mango_syrup = MangoSyrup()
-    cherry_syrup = CherrySyrup()
-    cup = Cup()
-    add_zone = AddZone()
+    cooking_screen()
     while running:
-
         screen.blit(fon, (0, 0))
         for event in pygame.event.get():
             recipes_book(event)
