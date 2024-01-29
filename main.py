@@ -4,11 +4,6 @@ from random import choice, randrange
 import pygame
 from pygame.time import Clock
 from recipes import *
-mango_counter = 0
-chery_counter = 0
-milk_counter = 0
-cream_counter = 0
-coffee_counter = 0
 
 
 def load_image(name):
@@ -27,35 +22,43 @@ def terminate():
 
 
 def start_screen():
-    global fon, screen_is
+    global fon, screen_is, level
     screen_is = 'start'
-    intro_text = ['New game', 'Continue', 'Instruct']
-    fon = pygame.transform.scale(load_image('coffee_fon.jpg'), (width, height))
+    level = recipes_lvl1
+    buttons_group.empty()
+    fon = pygame.transform.scale(load_image('coffe_fon.png'), (width, height))
     screen.blit(fon, (0, 0))
-    text_coord = [20, 110]
-    for line in intro_text:
-        Button(line, text_coord)
-        text_coord[-1] += 50
+    intro_text = 'New game'
+    text_coord = [20, 80]
+    Button(intro_text, text_coord)
 
 
 def order_screen():
     global fon, screen_is
     screen_is = 'order'
     buttons_group.empty()
-    fon = load_image('coffee_bg.png')
+    dialog_group.empty()
+    fon = load_image('coffee_bg2.png')
     screen.blit(fon, (0, 0))
     ordering()
     buttons = ['Принять', 'Отказаться']
     text_coord = [150, 340]
     for text in buttons:
         Button(text, text_coord)
-        text_coord[0] += 130
+        text_coord[0] += 150
 
 
 def cooking_screen():
     global screen_is, fon, coffe_machine, cream, milk, mango_syrup, cherry_syrup, cup, add_zone, coffee_order
+    global mango_counter, chery_counter, milk_counter, cream_counter, coffee_counter
+    mango_counter = 0
+    chery_counter = 0
+    milk_counter = 0
+    cream_counter = 0
+    coffee_counter = 0
     screen_is = 'cook'
     buttons_group.empty()
+    things_group.empty()
     fon = pygame.transform.scale(load_image('table_fon.png'), (width, height))
     screen.blit(fon, (0, 0))
     coffe_machine = CoffeMachine()
@@ -69,29 +72,70 @@ def cooking_screen():
     text_coord = [200, 375]
     for text in buttons:
         Button(text, text_coord)
-        text_coord[0] += 130
-    print(coffee_order)
+        text_coord[0] += 150
 
 
 def result_screen():
-    global screen_is, fon, coffee_order
+    global screen_is, fon, coffee_order, coffee_types, score, total_score
+    screen_is = 'result'
+    buttons_group.empty()
+    fon = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+    rect = fon.get_rect()
+    pygame.draw.rect(fon, (242, 151, 65), rect)
+    pygame.draw.rect(fon, (252, 199, 149), (3, 3, width - 6, height - 6))
+    screen.blit(fon, rect)
+    buttons = ["Далее", "Заново"]
+    text_coord = [230, 300]
+    for text in buttons:
+        Button(text, text_coord)
+        text_coord[0] += 150
+    user_coffee = [mango_counter, chery_counter, milk_counter, cream_counter, coffee_counter]
+    true_coffee = coffee_types[coffee_order]
+    score = 10000
+    for i in range(5):
+        diff = abs(true_coffee[i] - user_coffee[i])
+        if 0 < diff <= 2:
+            diff = 0
+        score -= diff * 22
+    total_score += score
+
+
+def final_screen():
+    global screen_is, fon, total_score
+    screen_is = 'final_result'
+    buttons_group.empty()
+    dialog_group.empty()
+    fon = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+    rect = fon.get_rect()
+    pygame.draw.rect(fon, (242, 151, 65), rect)
+    pygame.draw.rect(fon, (252, 199, 149), (3, 3, width - 6, height - 6))
+    screen.blit(fon, rect)
+    button = 'На главный экран'
+    Button(button, (270, 200), 220)
+    if total_score >= 21000:
+        final_text = ['Поздравляем! Вы приняты на работу!']
+    else:
+        final_text = ['Вы работали хоршо, поэтому мы возьмем вас на',
+                      'заметку. Мы перезвоним вам, если решим, что вы',
+                      'подходите нам']
+    Dialog(final_text, (150, 100))
 
 
 def ordering():
-    coffee_types = ['эспрессо', 'капучино', 'латте', 'раф']
+    global coffee_order, coffee_types
+    coffee_types = level
     greetings = [' - Здравствуйте! Можно мне ', ' - Здравствуйте! Мне пожалуйста ', ' - Здравствуйте! Я бы хотел ',
                  ' - Добрый день! Мне пожалуйста ', ' - Добрый день! Можно мне ', ' - Добрый день! Я бы хотел ']
-    global coffee_order
-    coffee_order = choice(coffee_types)
+    coffee_order = choice(list(coffee_types.keys()))
     order = [choice(greetings) + coffee_order]
-    Dialog(order)
+    Dialog(order, (100, 300))
 
 
 def coffee_falling():
     global coffee_counter
     for _ in range(4):
         Liquid((choice([randrange(coffe_machine.rect.x + 80, coffe_machine.rect.x + 84),
-                        randrange(coffe_machine.rect.x+102, coffe_machine.rect.x+106)]),
+                        randrange(coffe_machine.rect.x + 102, coffe_machine.rect.x + 106)]),
                 coffe_machine.rect.y + 149), (99, 52, 1))
     if coffee_counter < 100:
         coffee_counter += 0.5
@@ -100,7 +144,7 @@ def coffee_falling():
 def cream_falling():
     global cream_counter
     for _ in range(3):
-        Liquid((randrange(cream.rect.x + 37, cream.rect.x + 43), cream.rect.y+115), (255, 255, 255))
+        Liquid((randrange(cream.rect.x + 37, cream.rect.x + 43), cream.rect.y + 115), (255, 255, 255))
     if cream_counter < 100:
         cream_counter += 0.5
 
@@ -108,7 +152,7 @@ def cream_falling():
 def milk_falling():
     global milk_counter
     for _ in range(3):
-        Liquid((randrange(milk.rect.x + 7, milk.rect.x + 13), milk.rect.y+83), (255, 255, 255))
+        Liquid((randrange(milk.rect.x + 7, milk.rect.x + 13), milk.rect.y + 83), (255, 255, 255))
     if milk_counter < 100:
         milk_counter += 0.5
 
@@ -116,7 +160,7 @@ def milk_falling():
 def mango_syrup_falling():
     global mango_counter
     for _ in range(3):
-        Liquid((randrange(mango_syrup.rect.x + 22, mango_syrup.rect.x + 28), mango_syrup.rect.y+40), (255, 220, 28))
+        Liquid((randrange(mango_syrup.rect.x + 22, mango_syrup.rect.x + 28), mango_syrup.rect.y + 40), (255, 220, 28))
     if mango_counter < 100:
         mango_counter += 0.5
 
@@ -124,7 +168,7 @@ def mango_syrup_falling():
 def cherry_syrup_falling():
     global chery_counter
     for _ in range(3):
-        Liquid((randrange(cherry_syrup.rect.x + 22, cherry_syrup.rect.x + 28), cherry_syrup.rect.y+40), (125, 1, 1))
+        Liquid((randrange(cherry_syrup.rect.x + 22, cherry_syrup.rect.x + 28), cherry_syrup.rect.y + 40), (125, 1, 1))
     if chery_counter < 100:
         chery_counter += 0.5
 
@@ -141,8 +185,8 @@ def count_viz(s):
     rect.y = 10
     screen.blit(image, rect)
     pygame.draw.rect(s, (131, 104, 0), (645, 28, 38, 10))
-    font = pygame.font.Font(None, 14)
-    text = font.render('recipes', True, (77, 61, 2))
+    font = pygame.font.Font('data/quazimode.ttf', 8)
+    text = font.render('recipes', False, (77, 61, 2))
     screen.blit(text, (647, 28))
     pygame.draw.rect(s, (255, 180, 0), (10, 10, 10, mango_counter))
     pygame.draw.rect(s, (150, 0, 0), (25, 10, 10, chery_counter))
@@ -258,20 +302,20 @@ def draw_book():
         pygame.draw.rect(screen, (255, 255, 255), (40 + m, b, 10, 102), 2)
         pygame.draw.rect(screen, (255, 255, 255), (55 + m, b, 10, 102), 2)
         pygame.draw.rect(screen, (255, 255, 255), (70 + m, b, 10, 102), 2)
-        font = pygame.font.Font(None, 20)
-        lvl1 = font.render(" капучино                            латте                             эспрессо", True,
+        font = pygame.font.Font('data/quazimode.ttf', 12)
+        lvl1 = font.render(" капучино                            латте                          эспрессо", True,
                            (255, 255, 255))
         lvl1_x = 90
         lvl1_y = 10
         screen.blit(lvl1, (lvl1_x, lvl1_y))
 
-        lvl2 = font.render(" капучино с вишней           латте с вишней                        раф ", True,
+        lvl2 = font.render(" капучино с вишней           латте с вишней                       раф ", True,
                            (255, 255, 255))
         lvl2_x = 60
         lvl2_y = 140
         screen.blit(lvl2, (lvl2_x, lvl2_y))
 
-        lvl3 = font.render("   раф с вишней                  раф с манго                раф манго и вишня", True,
+        lvl3 = font.render("   раф с вишней                  раф с манго              раф манго и вишня", True,
                            (255, 255, 255))
         lvl3_x = 70
         lvl3_y = 263
@@ -290,16 +334,16 @@ def recipes_book(*args):
 
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, text, text_coord):
+    def __init__(self, text, text_coord, x_size=140):
         super().__init__(buttons_group, all_sprites)
         self.btn_text = text
-        self.size = (120, 25)
-        self.image = pygame.Surface((150, 30), pygame.SRCALPHA, 32)
+        self.size = (x_size, 25)
+        self.image = pygame.Surface((x_size, 25), pygame.SRCALPHA, 32)
         self.rect = pygame.Rect(*text_coord, *self.size)
-        self.font = pygame.font.Font(None, 25)
+        self.font = pygame.font.Font('data/quazimode.ttf', 20)
         pygame.draw.rect(self.image, (242, 151, 65), (0, 0, *self.size))
         pygame.draw.rect(self.image, (252, 199, 149), (3, 3, self.size[0] - 6, self.size[1] - 6))
-        self.text = self.font.render(self.btn_text, 1, (89, 58, 29))
+        self.text = self.font.render(self.btn_text, 0, (89, 58, 29))
         self.image.blit(self.text, (4, 4))
         screen.blit(self.image, self.rect)
 
@@ -307,15 +351,17 @@ class Button(pygame.sprite.Sprite):
         if self.rect.collidepoint(args[0].pos):
             if self.btn_text == 'New game':
                 order_screen()
-            if self.btn_text == 'Continue':
+            elif self.btn_text == 'Continue':
                 print('game continued')
-            if self.btn_text == 'Instruct':
+            elif self.btn_text == 'Instruct':
                 print('instruct is opened')
-            if self.btn_text == 'Отказаться':
+            elif self.btn_text == 'Отказаться':
                 ordering()
-            if self.btn_text == 'Принять':
+            elif self.btn_text == 'Принять':
                 cooking_screen()
-            if self.btn_text == "Сбросить":
+            elif self.btn_text == "Готово":
+                result_screen()
+            elif self.btn_text == "Сбросить":
                 global mango_counter
                 global chery_counter
                 global milk_counter
@@ -326,16 +372,32 @@ class Button(pygame.sprite.Sprite):
                 milk_counter = 0
                 cream_counter = 0
                 coffee_counter = 0
+            elif self.btn_text == 'Далее':
+                global level
+                if level == recipes_lvl1:
+                    level = recipes_lvl2
+                    order_screen()
+                elif level == recipes_lvl2:
+                    level = recipes_lvl3
+                    order_screen()
+                else:
+                    final_screen()
+            elif self.btn_text == 'Заново':
+                global visible
+                visible = True
+                order_screen()
+            elif self.btn_text == 'На главный экран':
+                start_screen()
 
 
 class Dialog(pygame.sprite.Sprite):
-    def __init__(self, text):
+    def __init__(self, text, coords):
         super().__init__(all_sprites, dialog_group)
         self.text = text[::]
         self.size = (500, 10 + 15 * len(self.text) + 10)
         self.image = pygame.Surface(self.size, pygame.SRCALPHA, 32)
-        self.rect = pygame.Rect(100, 300, *self.size)
-        self.font = pygame.font.Font(None, 25)
+        self.rect = pygame.Rect(*coords, *self.size)
+        self.font = pygame.font.Font('data/quazimode.ttf', 15)
         pygame.draw.rect(self.image, (242, 151, 65), (0, 0, *self.size))
         pygame.draw.rect(self.image, (252, 199, 149), (3, 3, self.size[0] - 6, self.size[1] - 6))
         self.text_coord = 10
@@ -376,13 +438,14 @@ class Cream(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+            global visible
             if args[0].button == 1:
                 if not self.is_moving:
                     self.rect = self.image.get_rect()
                     self.rect.x = args[0].pos[0] - 15
                     self.rect.y = args[0].pos[1] - self.rect.height // 2 + 30
                     self.is_moving = True
-                    pygame.mouse.set_visible(False)
+                    visible = False
                 else:
                     if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
@@ -403,7 +466,7 @@ class Cream(pygame.sprite.Sprite):
                 self.rect.y = self.true_pos[-1]
                 self.is_moving = False
                 self.is_adding = False
-                pygame.mouse.set_visible(True)
+                visible = True
         if self.is_moving and args[0].type == pygame.MOUSEMOTION:
             if not self.is_adding:
                 self.rect.x = args[0].pos[0] - 15
@@ -435,13 +498,14 @@ class Milk(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+            global visible
             if args[0].button == 1:
                 if not self.is_moving:
                     self.rect = self.image.get_rect()
                     self.rect.x = args[0].pos[0]
                     self.rect.y = args[0].pos[1] - 25
                     self.is_moving = True
-                    pygame.mouse.set_visible(False)
+                    visible = False
                 else:
                     if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
@@ -462,7 +526,7 @@ class Milk(pygame.sprite.Sprite):
                 self.rect.y = self.true_pos[-1]
                 self.is_moving = False
                 self.is_adding = False
-                pygame.mouse.set_visible(True)
+                visible = True
         if self.is_moving and args[0].type == pygame.MOUSEMOTION:
             if not self.is_adding:
                 self.rect.x = args[0].pos[0]
@@ -495,13 +559,14 @@ class CherrySyrup(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+            global visible
             if args[0].button == 1:
                 if not self.is_moving:
                     self.rect = self.image.get_rect()
                     self.rect.x = args[0].pos[0] - 40
                     self.rect.y = args[0].pos[1]
                     self.is_moving = True
-                    pygame.mouse.set_visible(False)
+                    visible = False
                 else:
                     if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
@@ -522,7 +587,7 @@ class CherrySyrup(pygame.sprite.Sprite):
                 self.rect.y = self.true_pos[-1]
                 self.is_moving = False
                 self.is_adding = False
-                pygame.mouse.set_visible(True)
+                visible = True
         if self.is_moving and args[0].type == pygame.MOUSEMOTION:
             if not self.is_adding:
                 self.rect.x = args[0].pos[0] - 40
@@ -555,13 +620,14 @@ class MangoSyrup(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+            global visible
             if args[0].button == 1:
                 if not self.is_moving:
                     self.rect = self.image.get_rect()
                     self.rect.x = args[0].pos[0] - 40
                     self.rect.y = args[0].pos[1]
                     self.is_moving = True
-                    pygame.mouse.set_visible(False)
+                    visible = False
                 else:
                     if not self.is_adding and add_zone.rect.collidepoint(args[0].pos):
                         self.is_adding = True
@@ -582,7 +648,7 @@ class MangoSyrup(pygame.sprite.Sprite):
                 self.rect.y = self.true_pos[-1]
                 self.is_moving = False
                 self.is_adding = False
-                pygame.mouse.set_visible(True)
+                visible = True
         if self.is_moving and args[0].type == pygame.MOUSEMOTION:
             if not self.is_adding:
                 self.rect.x = args[0].pos[0] - 40
@@ -615,6 +681,7 @@ class Cup(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+            global visible
             if args[0].button == 1:
                 if not self.is_moving:
                     self.image = Cup.image
@@ -623,7 +690,7 @@ class Cup(pygame.sprite.Sprite):
                     self.rect.x = args[0].pos[0] - self.rect.width // 2
                     self.rect.y = args[0].pos[1] - self.rect.height // 2
                     self.is_moving = True
-                    pygame.mouse.set_visible(False)
+                    visible = False
             elif args[0].button == 3 and self.is_moving:
                 if coffe_machine.rect.collidepoint(args[0].pos):
                     self.is_in_coffee_machine = True
@@ -635,7 +702,7 @@ class Cup(pygame.sprite.Sprite):
                     self.rect.x = self.true_pos[0]
                     self.rect.y = self.true_pos[-1]
                 self.is_moving = False
-                pygame.mouse.set_visible(True)
+                visible = True
         if self.is_moving and args[0].type == pygame.MOUSEMOTION:
             self.rect.x = args[0].pos[0] - self.rect.width // 2
             self.rect.y = args[0].pos[1] - self.rect.height // 2
@@ -679,7 +746,10 @@ if __name__ == '__main__':
     fps = 50
     GRAVITY = 0.1
     is_open = False
+    visible = True
     screen_is = 'start'
+    level = recipes_lvl1
+    total_score = 0
     screen = pygame.display.set_mode(size)
     clock = Clock()
     all_sprites = pygame.sprite.Group()
@@ -691,6 +761,7 @@ if __name__ == '__main__':
     start_screen()
     global fon
     while running:
+        pygame.mouse.set_visible(visible)
         screen.blit(fon, (0, 0))
         for event in pygame.event.get():
             recipes_book(event)
@@ -719,13 +790,26 @@ if __name__ == '__main__':
             if cherry_syrup.is_adding:
                 cherry_syrup_falling()
             if not is_open:
-                font = pygame.font.Font(None, 30)
+                font = pygame.font.Font('data/quazimode.ttf', 20)
                 order_text = font.render(f'Заказ: {coffee_order}', 1, (89, 58, 29))
                 screen.blit(order_text, (width // 2 - 100, 20))
                 buttons_group.draw(screen)
         elif screen_is == 'order':
-            guy = load_image('guy3.png')
+            visible = True
+            guy = load_image('guy.png')
             screen.blit(guy, (220, 68))
+            dialog_group.draw(screen)
+            buttons_group.draw(screen)
+        elif screen_is == 'result':
+            global score
+            font = pygame.font.Font('data/quazimode.ttf', 35)
+            congratulation = font.render('Уровень пройден!!!', 1, (89, 58, 29))
+            screen.blit(congratulation, (200, 50))
+            font = pygame.font.Font('data/quazimode.ttf', 20)
+            score_text = font.render(f'Ваш счёт: {score} из 10000', 1, (89, 58, 29))
+            screen.blit(score_text, (240, 100))
+            buttons_group.draw(screen)
+        elif screen_is == 'final_result':
             dialog_group.draw(screen)
             buttons_group.draw(screen)
         else:
