@@ -1,9 +1,21 @@
 import os
+import sqlite3
 import sys
 from random import choice, randrange
 import pygame
 from pygame.time import Clock
 from recipes import *
+
+
+conn = sqlite3.connect('game_scores.db')
+cursor = conn.cursor()
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS game_scores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        score INTEGER NOT NULL
+    )
+''')
+conn.commit()
 
 
 def load_image(name):
@@ -118,6 +130,9 @@ def final_screen():
         final_text = ['Вы работали хоршо, поэтому мы возьмем вас на',
                       'заметку. Мы перезвоним вам, если решим, что вы',
                       'подходите нам']
+    cursor.execute('INSERT INTO game_scores (score) VALUES (?)', (total_score,))
+    conn.commit()
+    total_score = 0
     Dialog(final_text, (150, 100))
 
 
@@ -185,8 +200,8 @@ def count_viz(s):
     rect.y = 10
     screen.blit(image, rect)
     pygame.draw.rect(s, (131, 104, 0), (645, 28, 38, 10))
-    font = pygame.font.Font('data/quazimode.ttf', 8)
-    text = font.render('recipes', False, (77, 61, 2))
+    t_font = pygame.font.Font('data/quazimode.ttf', 8)
+    text = t_font.render('recipes', False, (77, 61, 2))
     screen.blit(text, (647, 28))
     pygame.draw.rect(s, (255, 180, 0), (10, 10, 10, mango_counter))
     pygame.draw.rect(s, (150, 0, 0), (25, 10, 10, chery_counter))
@@ -302,21 +317,21 @@ def draw_book():
         pygame.draw.rect(screen, (255, 255, 255), (40 + m, b, 10, 102), 2)
         pygame.draw.rect(screen, (255, 255, 255), (55 + m, b, 10, 102), 2)
         pygame.draw.rect(screen, (255, 255, 255), (70 + m, b, 10, 102), 2)
-        font = pygame.font.Font('data/quazimode.ttf', 12)
-        lvl1 = font.render(" капучино                            латте                          эспрессо", True,
-                           (255, 255, 255))
+        t_font = pygame.font.Font('data/quazimode.ttf', 12)
+        lvl1 = t_font.render(" капучино                            латте                          эспрессо", True,
+                             (255, 255, 255))
         lvl1_x = 90
         lvl1_y = 10
         screen.blit(lvl1, (lvl1_x, lvl1_y))
 
-        lvl2 = font.render(" капучино с вишней           латте с вишней                       раф ", True,
-                           (255, 255, 255))
+        lvl2 = t_font.render(" капучино с вишней           латте с вишней                       раф ", True,
+                             (255, 255, 255))
         lvl2_x = 60
         lvl2_y = 140
         screen.blit(lvl2, (lvl2_x, lvl2_y))
 
-        lvl3 = font.render("   раф с вишней                  раф с манго              раф манго и вишня", True,
-                           (255, 255, 255))
+        lvl3 = t_font.render("   раф с вишней                  раф с манго              раф манго и вишня", True,
+                             (255, 255, 255))
         lvl3_x = 70
         lvl3_y = 263
         screen.blit(lvl3, (lvl3_x, lvl3_y))
@@ -745,10 +760,16 @@ if __name__ == '__main__':
     size = width, height = 720, 405
     fps = 50
     GRAVITY = 0.1
+    mango_counter = 0
+    chery_counter = 0
+    milk_counter = 0
+    cream_counter = 0
+    coffee_counter = 0
     is_open = False
     visible = True
     screen_is = 'start'
     level = recipes_lvl1
+    coffee_types = level
     total_score = 0
     screen = pygame.display.set_mode(size)
     clock = Clock()
@@ -758,9 +779,12 @@ if __name__ == '__main__':
     things_group = pygame.sprite.Group()
     liquid_group = pygame.sprite.Group()
     running = True
+
     start_screen()
+
     global fon
     while running:
+
         pygame.mouse.set_visible(visible)
         screen.blit(fon, (0, 0))
         for event in pygame.event.get():
@@ -814,5 +838,6 @@ if __name__ == '__main__':
             buttons_group.draw(screen)
         else:
             buttons_group.draw(screen)
+
         pygame.display.flip()
         clock.tick(fps)
